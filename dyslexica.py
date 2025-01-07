@@ -23,12 +23,15 @@ def process_highlighted_text():
 
         # Step 3: Send the captured text to the AI model with the refined prompt
         print("[INFO] Sending text to the model...")
-        prompt = (
-            "Correct the following text by fixing only grammar, spelling, and punctuation mistakes. "
-            "Enhance readability where necessary but do not change the original meaning. "
-            "Preserve line breaks, formatting, and structure. "
-            "Respond only with the corrected text, without quotation marks or additional formatting. \n\n"
-            f"Text to correct: {text}"
+        prompt = ( "Correct the following text by fixing only grammar, spelling, and punctuation mistakes. "
+        "Enhance readability where necessary but do not change the original meaning. \n\n"
+        "Examples:\n"
+        'Input: "This is the first line. it has a mistake."\n'
+        'Output: "This is the first line. It has a mistake."\n\n'
+        'Input: "This is the second line and it needs punctuation"\n'
+        'Output: "This is the second line, and it needs punctuation."\n\n'
+        "Text to correct: {text}"
+             f"Text to correct: {text}"
         )
         response: ChatResponse = chat(model='gemma:2b-instruct', messages=[
             {
@@ -43,7 +46,7 @@ def process_highlighted_text():
             print("[ERROR] No valid response received from the model.")
             return
 
-        # Remove any enclosing quotation marks
+        # Remove any enclosing quotation marks (if any, as a safety net)
         if result.startswith('"') and result.endswith('"'):
             result = result[1:-1]
 
